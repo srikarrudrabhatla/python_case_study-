@@ -1,0 +1,156 @@
+# Tic Tac Toe
+import random
+
+# 3x3 board (list of lists)
+board = [
+    [' ', ' ', ' '],
+    [' ', ' ', ' '],
+    [' ', ' ', ' ']
+]
+
+# Function to print the board
+def print_board():
+    print("   0   1   2 ")
+    print("0  " + board[0][0] + " | " + board[0][1] + " | " + board[0][2])
+    print("  ---+---+---")
+    print("1  " + board[1][0] + " | " + board[1][1] + " | " + board[1][2])
+    print("  ---+---+---")
+    print("2  " + board[2][0] + " | " + board[2][1] + " | " + board[2][2])
+
+# Function to check if move is valid
+def is_valid_move(row, col):
+    if row < 0 or row > 2 or col < 0 or col > 2:
+        return False
+    if board[row][col] != ' ':
+        return False
+    return True
+
+# Function to check if someone has won
+def check_winner():
+    # Check rows
+    for row in range(3):
+        if board[row][0] == board[row][1] == board[row][2] and board[row][0] != ' ':
+            return board[row][0]
+    # Check columns
+    for col in range(3):
+        if board[0][col] == board[1][col] == board[2][col] and board[0][col] != ' ':
+            return board[0][col]
+    # Check diagonals
+    if board[0][0] == board[1][1] == board[2][2] and board[0][0] != ' ':
+        return board[0][0]
+    if board[0][2] == board[1][1] == board[2][0] and board[0][2] != ' ':
+        return board[0][2]
+    return None  # no winner
+
+# Function to check if game is draw
+def is_draw():
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] == ' ':
+                return False
+    return True
+
+# Player vs Player mode
+def play_pvp():
+    print("=== Player vs Player ===")
+    print("Player 1 = X, Player 2 = O")
+    current_player = 'X'
+    game_over = False
+
+    while not game_over:
+        print()
+        print_board()
+        print("Player", current_player, "turn")
+        row = int(input("Enter row (0,1,2): "))
+        col = int(input("Enter column (0,1,2): "))
+
+        if not is_valid_move(row, col):
+            print("Invalid move. Try again.")
+            continue
+
+        board[row][col] = current_player
+
+        winner = check_winner()
+        if winner == current_player:
+            print_board()
+            print("Player", winner, "wins!")
+            game_over = True
+        elif is_draw():
+            print_board()
+            print("It's a draw!")
+            game_over = True
+        else:
+            if current_player == 'X':
+                current_player = 'O'
+            else:
+                current_player = 'X'
+
+# Player vs Computer mode (simple random AI)
+def play_pvc():
+    print("=== Player vs Computer ===")
+    print("You = X, Computer = O")
+    current_player = 'X'
+    game_over = False
+
+    while not game_over:
+        print()
+        print_board()
+
+        if current_player == 'X':
+            print("Your turn (X)")
+            row = int(input("Enter row (0,1,2): "))
+            col = int(input("Enter column (0,1,2): "))
+
+            if not is_valid_move (row, col):
+                print("Invalid move. Try again.")
+                continue
+            board[row][col] = 'X'
+        else:
+            print("Computer's turn (O)")
+            while True:
+                row = random.randint(0, 2)
+                col = random.randint(0, 2)
+                if is_valid_move(row, col):
+                    board[row][col] = 'O'
+                    break
+
+        winner = check_winner()
+        if winner == current_player:
+            print_board()
+            print("Player", winner, "wins!")
+            game_over = True
+        elif is_draw():
+            print_board()
+            print("It's a draw!")
+            game_over = True
+        else:
+            if current_player == 'X':
+                current_player = 'O'
+            else:
+                current_player = 'X'
+
+# Main menu
+def main():
+    print("Tic Tac Toe")
+    print("1. Player vs Player")
+    print("2. Player vs Computer")
+
+    choice = input("Choose mode (1/2): ")
+
+    # Reset the board
+    for i in range(3):
+        for j in range(3):
+            board[i][j] = ' '
+
+    if choice == '1':
+        play_pvp ()
+    elif choice == '2':
+        play_pvc()
+    else:
+        print("Invalid choice. Exiting.")
+
+# Run the game
+if __name__ == "__main__":
+    main()
+
+ 
